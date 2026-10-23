@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:live": "node --env-file=.env.local ./node_modules/vitest/vitest.mjs run --config vitest.live.config.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
