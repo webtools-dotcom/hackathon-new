@@ -37,7 +37,7 @@ export function PayloadDrawer({ payloads, metrics }: PayloadDrawerProps) {
             dialogRef.current?.close();
           }
         }}
-        className="fixed inset-y-0 right-0 z-50 m-0 ml-auto flex h-full max-h-screen w-full flex-col border-l border-border bg-background p-6 shadow-xl backdrop:bg-black/40 sm:max-w-lg"
+        className="fixed inset-y-0 right-0 z-50 m-0 ml-auto hidden open:flex h-full max-h-screen w-full flex-col border-l border-border bg-background p-6 shadow-xl backdrop:bg-black/40 sm:max-w-lg"
       >
         <div className="flex items-center justify-between border-b pb-3">
           <h2 className="text-base font-semibold">What the model saw</h2>
