@@ -7,12 +7,13 @@ import type {
   StepResult,
   Action,
 } from "@/lib/engine/schemas";
-import type {
-  PlanRequest,
-  PlanResponse,
-  NarrateRequest,
-  NarrateResponse,
-  ResponseMeta,
+import type { z } from "zod";
+import {
+  NarrateResponseSchema,
+  PlanResponseSchema,
+  type PlanRequest,
+  type NarrateRequest,
+  type ResponseMeta,
 } from "@/lib/server/contracts";
 import { profileRows } from "@/lib/engine/profile";
 import { buildSamples } from "@/lib/engine/mask";
@@ -74,9 +75,11 @@ export interface AgentOutput {
 }
 
 export interface AgentDeps {
+  /** POSTs JSON and validates the response body against `schema`. */
   postJson: <T>(
     url: "/api/plan" | "/api/narrate",
-    body: unknown
+    body: unknown,
+    schema: z.ZodType<T>
   ) => Promise<
     | { ok: true; data: T; bytes: number }
     | { ok: false; status: number; bytes: number }
@@ -86,7 +89,7 @@ export interface AgentDeps {
 
 export const defaultDeps: AgentDeps = {
   now: () => performance.now(),
-  postJson: async <T>(url: "/api/plan" | "/api/narrate", body: unknown) => {
+  postJson: async (url, body, schema) => {
     const jsonStr = JSON.stringify(body);
     const bytes = new TextEncoder().encode(jsonStr).length;
     try {
@@ -99,8 +102,11 @@ export const defaultDeps: AgentDeps = {
       if (!res.ok) {
         return { ok: false as const, status: res.status, bytes };
       }
-      const data = (await res.json()) as T;
-      return { ok: true as const, data, bytes };
+      const parsed = schema.safeParse(await res.json());
+      if (!parsed.success) {
+        return { ok: false as const, status: 502, bytes };
+      }
+      return { ok: true as const, data: parsed.data, bytes };
     } catch {
       return { ok: false as const, status: 0, bytes };
     }
@@ -267,7 +273,7 @@ export async function runAgent(
 
     let plan: Plan;
     let planDetail = "";
-    const planRes = await deps.postJson<PlanResponse>("/api/plan", planReq);
+    const planRes = await deps.postJson("/api/plan", planReq, PlanResponseSchema);
     sentBytes += planRes.bytes;
 
     if (planRes.ok) {
@@ -385,9 +391,10 @@ export async function runAgent(
       };
       payloads.replan = replanReq;
 
-      const replanRes = await deps.postJson<PlanResponse>(
+      const replanRes = await deps.postJson(
         "/api/plan",
-        replanReq
+        replanReq,
+        PlanResponseSchema
       );
       sentBytes += replanRes.bytes;
 
@@ -449,9 +456,10 @@ export async function runAgent(
     let rejectedActions = 0;
     let narrateDetail = "";
 
-    const narrateRes = await deps.postJson<NarrateResponse>(
+    const narrateRes = await deps.postJson(
       "/api/narrate",
-      narrateReq
+      narrateReq,
+      NarrateResponseSchema
     );
     sentBytes += narrateRes.bytes;
 

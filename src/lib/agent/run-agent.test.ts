@@ -1,6 +1,8 @@
-import { describe, it, expect } from "vitest";
+import { afterEach, describe, it, expect, vi } from "vitest";
+import { PlanResponseSchema } from "@/lib/server/contracts";
 import {
   runAgent,
+  defaultDeps,
   errorMessage,
   MAX_CSV_BYTES,
   type AgentDeps,
@@ -17,7 +19,7 @@ describe("runAgent", () => {
   it("runs the full flow on sample data with a fake api", async () => {
     const fakeDeps: AgentDeps = {
       now: () => 1000,
-      postJson: async <T>(url: "/api/plan" | "/api/narrate") => {
+      postJson: async (url, body, schema) => {
         if (url === "/api/plan") {
           const payload = {
             plan: SAMPLE_PLAN,
@@ -33,7 +35,7 @@ describe("runAgent", () => {
           };
           return {
             ok: true as const,
-            data: payload as unknown as T,
+            data: schema.parse(payload),
             bytes: 400,
           };
         }
@@ -74,7 +76,7 @@ describe("runAgent", () => {
         };
         return {
           ok: true as const,
-          data: payload as unknown as T,
+          data: schema.parse(payload),
           bytes: 500,
         };
       },
@@ -100,28 +102,28 @@ describe("runAgent", () => {
     const bodies: string[] = [];
     const fakeDeps: AgentDeps = {
       now: () => 1000,
-      postJson: async <T>(_url: "/api/plan" | "/api/narrate", body: unknown) => {
+      postJson: async (_url, body, schema) => {
         bodies.push(JSON.stringify(body));
         const payload = {
           plan: SAMPLE_PLAN,
           actions: [
             {
               title: "Action 1",
-              detail: "Detail 1",
+              detail: "Detail for action 1",
               evidence: [
                 { stepId: "revenue_total", label: "Total", value: 1 },
               ],
             },
             {
               title: "Action 2",
-              detail: "Detail 2",
+              detail: "Detail for action 2",
               evidence: [
                 { stepId: "revenue_total", label: "Total", value: 1 },
               ],
             },
             {
               title: "Action 3",
-              detail: "Detail 3",
+              detail: "Detail for action 3",
               evidence: [
                 { stepId: "revenue_total", label: "Total", value: 1 },
               ],
@@ -140,7 +142,7 @@ describe("runAgent", () => {
         };
         return {
           ok: true as const,
-          data: payload as unknown as T,
+          data: schema.parse(payload),
           bytes: 100,
         };
       },
@@ -184,7 +186,7 @@ describe("runAgent", () => {
 
     const fakeDeps: AgentDeps = {
       now: () => 1000,
-      postJson: async <T>(url: "/api/plan" | "/api/narrate") => {
+      postJson: async (url, body, schema) => {
         if (url === "/api/plan") {
           planCalls++;
           const payload = {
@@ -201,7 +203,7 @@ describe("runAgent", () => {
           };
           return {
             ok: true as const,
-            data: payload as unknown as T,
+            data: schema.parse(payload),
             bytes: 100,
           };
         }
@@ -220,7 +222,7 @@ describe("runAgent", () => {
         };
         return {
           ok: true as const,
-          data: payload as unknown as T,
+          data: schema.parse(payload),
           bytes: 100,
         };
       },
@@ -257,7 +259,7 @@ describe("runAgent", () => {
   it("reports sentBytes far below rawBytes for sample data", async () => {
     const fakeDeps: AgentDeps = {
       now: () => 1000,
-      postJson: async <T>() => {
+      postJson: async (url, body, schema) => {
         const payload = {
           plan: SAMPLE_PLAN,
           actions: [],
@@ -274,7 +276,7 @@ describe("runAgent", () => {
         };
         return {
           ok: true as const,
-          data: payload as unknown as T,
+          data: schema.parse(payload),
           bytes: 500,
         };
       },
@@ -310,5 +312,24 @@ describe("runAgent", () => {
     expect(errorMessage("file_too_large")).toBe(
       "That file is over 5 MB. Export a smaller date range."
     );
+  });
+});
+
+describe("defaultDeps.postJson", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("rejects a response body that does not match the contract", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => Response.json({ plan: "not a plan" })));
+    const res = await defaultDeps.postJson("/api/plan", { a: 1 }, PlanResponseSchema);
+    expect(res).toEqual({ ok: false, status: 502, bytes: 7 });
+  });
+
+  it("reports network failures as status 0 instead of throwing", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => { throw new TypeError("offline"); }));
+    const res = await defaultDeps.postJson("/api/plan", {}, PlanResponseSchema);
+    expect(res.ok).toBe(false);
+    expect(res).toMatchObject({ status: 0 });
   });
 });

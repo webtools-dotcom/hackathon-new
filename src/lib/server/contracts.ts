@@ -4,8 +4,7 @@ import {
   DatasetProfileSchema,
   PlanSchema,
   StepSchema,
-  type Plan,
-  type Action,
+  ActionSchema,
 } from "@/lib/engine/schemas";
 
 const Cell = z.string().max(64);
@@ -76,25 +75,27 @@ export const NarrateRequestSchema = z
 
 export type NarrateRequest = z.infer<typeof NarrateRequestSchema>;
 
-export type Source = "gemini" | "cache" | "fallback";
+export const SourceSchema = z.enum(["gemini", "cache", "fallback"]);
+export type Source = z.infer<typeof SourceSchema>;
 
-export interface ResponseMeta {
-  source: Source;
-  model: string | null;
-  latencyMs: number;
-  attempts: number;
-  promptTokens: number;
-  outputTokens: number;
-  requestBytes: number;
-}
+export const ResponseMetaSchema = z.object({
+  source: SourceSchema,
+  model: z.string().nullable(),
+  latencyMs: z.number().nonnegative(),
+  attempts: z.number().int().nonnegative(),
+  promptTokens: z.number().nonnegative(),
+  outputTokens: z.number().nonnegative(),
+  requestBytes: z.number().nonnegative(),
+});
+export type ResponseMeta = z.infer<typeof ResponseMetaSchema>;
 
-export interface PlanResponse {
-  plan: Plan;
-  meta: ResponseMeta;
-}
+/** Response bodies are validated again in the browser before use. */
+export const PlanResponseSchema = z.object({ plan: PlanSchema, meta: ResponseMetaSchema });
+export type PlanResponse = z.infer<typeof PlanResponseSchema>;
 
-export interface NarrateResponse {
-  actions: Action[];
-  rejected: number;
-  meta: ResponseMeta;
-}
+export const NarrateResponseSchema = z.object({
+  actions: z.array(ActionSchema),
+  rejected: z.number().int().nonnegative(),
+  meta: ResponseMetaSchema,
+});
+export type NarrateResponse = z.infer<typeof NarrateResponseSchema>;
