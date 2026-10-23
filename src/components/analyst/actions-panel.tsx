@@ -30,7 +30,7 @@ export function ActionsPanel({
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-lg font-semibold tracking-tight">Recommended Actions</h3>
+        <h2 className="text-lg font-semibold tracking-tight">Recommended Actions</h2>
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant="outline" className="flex items-center gap-1 text-xs">
             <CheckCircle2 className="h-3 w-3 text-primary" aria-hidden="true" />

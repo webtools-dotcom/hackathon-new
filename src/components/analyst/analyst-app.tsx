@@ -177,9 +177,9 @@ export function AnalystApp() {
                   <Lock className="h-4 w-4" aria-hidden="true" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-foreground">
+                  <h2 className="text-sm font-semibold text-foreground">
                     0 raw rows sent to the model
-                  </h3>
+                  </h2>
                   <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
                     By mathematical construction, only column names, summary types,
                     and 5 masked sample rows are sent to plan. Calculations run locally.
@@ -196,9 +196,9 @@ export function AnalystApp() {
               <p className="text-xs font-semibold uppercase tracking-wider text-primary">
                 Dataset Analysis
               </p>
-              <h2 className="text-xl font-semibold tracking-tight text-foreground truncate max-w-md">
+              <h1 className="text-xl font-semibold tracking-tight text-foreground truncate max-w-md">
                 {fileName ?? "Analysis"}
-              </h2>
+              </h1>
             </div>
             <div className="flex items-center gap-2">
               {output ? (
@@ -225,7 +225,7 @@ export function AnalystApp() {
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 text-destructive mb-3">
                 <TriangleAlert className="h-6 w-6" aria-hidden="true" />
               </div>
-              <h3 className="text-lg font-semibold">Analysis Failed</h3>
+              <h2 className="text-lg font-semibold">Analysis Failed</h2>
               <p className="mt-1 text-sm text-muted-foreground max-w-md mx-auto">
                 {error}
               </p>
@@ -264,7 +264,7 @@ export function AnalystApp() {
                 </details>
 
                 <div className="hidden rounded-lg border bg-card p-4 text-card-foreground shadow-sm lg:block">
-                  <h3 className="text-sm font-semibold mb-3">Agent trace</h3>
+                  <h2 className="text-sm font-semibold mb-3">Agent trace</h2>
                   <AgentTrace trace={trace} />
                 </div>
 

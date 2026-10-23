@@ -13,8 +13,8 @@ export function ThemeToggle() {
       aria-label="Toggle theme"
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
     >
-      <Sun className="h-4 w-4 scale-100 dark:scale-0 transition-transform" />
-      <Moon className="absolute h-4 w-4 scale-0 dark:scale-100 transition-transform" />
+      <Sun className="h-4 w-4 scale-100 dark:scale-0 transition-transform" aria-hidden="true" />
+      <Moon className="absolute h-4 w-4 scale-0 dark:scale-100 transition-transform" aria-hidden="true" />
     </Button>
   );
 }

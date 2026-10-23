@@ -1,0 +1,8 @@
+{
+  "rawBytes": 33316,
+  "planBytes": 2702,
+  "narrateBytes": 1736,
+  "ratio": 0.1332,
+  "rowCount": 333,
+  "generatedBy": "src/lib/engine/measure.test.ts"
+}

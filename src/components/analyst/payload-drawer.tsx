@@ -12,19 +12,30 @@ interface PayloadDrawerProps {
 }
 
 export function PayloadDrawer({ payloads, metrics }: PayloadDrawerProps) {
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
   const dialogRef = React.useRef<HTMLDialogElement>(null);
 
   const fileKb = (metrics.rawBytes / 1024).toFixed(1);
   const sentKb = (metrics.sentBytes / 1024).toFixed(1);
 
+  const handleOpen = () => {
+    dialogRef.current?.showModal();
+  };
+
+  const handleClose = () => {
+    dialogRef.current?.close();
+    triggerRef.current?.focus();
+  };
+
   return (
     <>
       <Button
+        ref={triggerRef}
         type="button"
         variant="outline"
         size="sm"
-        onClick={() => dialogRef.current?.showModal()}
-        className="flex items-center gap-1.5"
+        onClick={handleOpen}
+        className="flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-ring"
       >
         <Eye className="h-4 w-4" aria-hidden="true" />
         What the model saw
@@ -34,8 +45,11 @@ export function PayloadDrawer({ payloads, metrics }: PayloadDrawerProps) {
         ref={dialogRef}
         onClick={(e) => {
           if (e.target === dialogRef.current) {
-            dialogRef.current?.close();
+            handleClose();
           }
+        }}
+        onClose={() => {
+          triggerRef.current?.focus();
         }}
         className="fixed inset-y-0 right-0 z-50 m-0 ml-auto hidden open:flex h-full max-h-screen w-full flex-col border-l border-border bg-background p-6 shadow-xl backdrop:bg-black/40 sm:max-w-lg"
       >
@@ -46,7 +60,8 @@ export function PayloadDrawer({ payloads, metrics }: PayloadDrawerProps) {
             variant="ghost"
             size="icon"
             aria-label="Close"
-            onClick={() => dialogRef.current?.close()}
+            onClick={handleClose}
+            className="focus-visible:ring-2 focus-visible:ring-ring"
           >
             <X className="h-4 w-4" aria-hidden="true" />
           </Button>
@@ -83,7 +98,11 @@ export function PayloadDrawer({ payloads, metrics }: PayloadDrawerProps) {
           </div>
 
           <Tabs defaultValue="plan" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList
+              className={`grid w-full ${
+                payloads.replan ? "grid-cols-3" : "grid-cols-2"
+              }`}
+            >
               <TabsTrigger value="plan">Plan request</TabsTrigger>
               {payloads.replan ? (
                 <TabsTrigger value="replan">Re-plan request</TabsTrigger>

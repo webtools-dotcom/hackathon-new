@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "bench": "vitest bench --run",
     "test": "vitest run",
     "test:live": "node --env-file=.env.local ./node_modules/vitest/vitest.mjs run --config vitest.live.config.ts"
   },

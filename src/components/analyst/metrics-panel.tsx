@@ -30,7 +30,7 @@ export function MetricsPanel({ metrics, trace }: MetricsPanelProps) {
 
   return (
     <div className="rounded-lg border bg-card p-4 text-card-foreground shadow-sm space-y-4">
-      <h3 className="text-sm font-semibold tracking-tight">Performance & Privacy</h3>
+      <h2 className="text-sm font-semibold tracking-tight">Performance & Privacy</h2>
 
       <dl className="space-y-3 text-xs">
         <div className="flex justify-between items-center">

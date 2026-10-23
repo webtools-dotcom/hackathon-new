@@ -48,7 +48,7 @@ flowchart LR
 |---|---|---|---|
 | Security | Server-only API key; Zod on every request and model output; allow-listed operations; PII masking in the browser; size caps; per-IP rate limit; security headers | [`src/app/api/`](src/app/api), [`src/lib/server/`](src/lib/server), [`src/lib/security-headers.ts`](src/lib/security-headers.ts) | `npm test`, [`SECURITY.md`](SECURITY.md) |
 | Efficiency | Only a profile, 5 masked rows and aggregates are sent; responses are cached by schema and question | [`run-agent.ts`](src/lib/agent/run-agent.ts), [`cache.ts`](src/lib/server/cache.ts) | Metrics panel, "What the model saw" drawer |
-| Testing | 64 Vitest tests: engine, masking, validation, routes with Gemini mocked, agent loop | `src/**/*.test.ts` | `npm test` |
+| Testing | 65 Vitest tests: engine, masking, validation, routes with Gemini mocked, agent loop | `src/**/*.test.ts` | `npm test` |
 | Accessibility | Labelled inputs, keyboard-usable upload and drawer, visible focus, icons plus text for status, hidden data tables behind charts, reduced-motion support, light and dark themes | [`src/components/analyst/`](src/components/analyst) | Keyboard and screen-reader walk-through |
 | Google technology | Gemini API through `@google/genai` with schema-constrained JSON output | [`gemini.ts`](src/lib/server/gemini.ts) | `npm run test:live` with a key |
 
@@ -62,7 +62,7 @@ Measured on the built-in sample dataset (333 orders, 11 columns), one run on a l
 | Raw rows sent to the model | 0 (5 masked sample rows) |
 | Tokens (plan + narrate) | 1,909 in / 727 out |
 | End-to-end time | 4.27 s (planning 2.52 s, writing actions 1.74 s, all in-browser steps under 10 ms) |
-| Tests | 64 passing (`npm test`) |
+| Tests | 65 passing (`npm test`) |
 
 ## Security model
 
