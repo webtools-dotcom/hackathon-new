@@ -1,3 +1,4 @@
+/** Server-only Gemini client: schema-constrained JSON output, timeouts and retry with backoff. */
 import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
 

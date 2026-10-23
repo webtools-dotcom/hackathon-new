@@ -1,3 +1,4 @@
+/** Rules-based plan and actions used when Gemini is unavailable. */
 import type {
   Action,
   DatasetProfile,

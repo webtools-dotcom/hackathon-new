@@ -27,26 +27,11 @@ import {
 } from "@/components/ui/chart";
 import type { StepResult } from "@/lib/engine/schemas";
 import { formatValue } from "@/lib/format";
+import { anomalyChangePct, describePeriod, formatPeriodLabel } from "@/lib/insights";
 
 interface ResultChartProps {
   result: StepResult;
   interval?: "day" | "week" | "month" | null;
-}
-
-function formatDateLabel(iso: string): string {
-  const parts = iso.split("-");
-  if (parts.length >= 3) {
-    const y = parseInt(parts[0], 10);
-    const m = parseInt(parts[1], 10);
-    const d = parseInt(parts[2], 10);
-    const dt = new Date(Date.UTC(y, m - 1, d));
-    return dt.toLocaleDateString("en-IN", {
-      day: "numeric",
-      month: "short",
-      timeZone: "UTC",
-    });
-  }
-  return iso;
 }
 
 export function ResultChart({ result, interval }: ResultChartProps) {
@@ -71,27 +56,27 @@ export function ResultChart({ result, interval }: ResultChartProps) {
         </CardDescription>
       </CardHeader>
       <CardContent className="p-4 pt-2">
-        <div role="img" aria-label={`${result.title} chart`}>
+        <div>
           <table className="sr-only">
             <caption>{result.title}</caption>
             <thead>
               <tr>
-                <th>Category</th>
-                <th>Value</th>
+                <th scope="col">{isTrend ? "Period" : "Label"}</th>
+                <th scope="col">Value</th>
               </tr>
             </thead>
             <tbody>
               {data.map((r) => (
                 <tr key={r.label}>
                   <td>{r.label}</td>
-                  <td>{r.value}</td>
+                  <td>{formatValue(r.value, result.column)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
 
           {isGroup ? (
-            <ChartContainer config={chartConfig} className="h-[260px] w-full">
+            <ChartContainer config={chartConfig} className="h-[260px] w-full" aria-hidden="true">
               <BarChart
                 layout="vertical"
                 data={data}
@@ -121,7 +106,7 @@ export function ResultChart({ result, interval }: ResultChartProps) {
               </BarChart>
             </ChartContainer>
           ) : isTrend ? (
-            <ChartContainer config={chartConfig} className="h-[260px] w-full">
+            <ChartContainer config={chartConfig} className="h-[260px] w-full" aria-hidden="true">
               <AreaChart
                 data={data}
                 margin={{ top: 10, right: 15, left: 10, bottom: 5 }}
@@ -131,7 +116,7 @@ export function ResultChart({ result, interval }: ResultChartProps) {
                   dataKey="label"
                   tickLine={false}
                   axisLine={false}
-                  tickFormatter={(v: string) => formatDateLabel(v)}
+                  tickFormatter={(v: string) => formatPeriodLabel(v)}
                 />
                 <YAxis
                   tickLine={false}
@@ -175,17 +160,8 @@ export function ResultChart({ result, interval }: ResultChartProps) {
         {result.anomalies && result.anomalies.length > 0 ? (
           <div className="mt-3 space-y-1.5 border-t pt-3">
             {result.anomalies.map((anom) => {
-              const prefix =
-                interval === "week" || !interval
-                  ? `Week of ${formatDateLabel(anom.label)}`
-                  : interval === "month"
-                  ? `Month ${anom.label}`
-                  : `Day ${formatDateLabel(anom.label)}`;
-
-              const pct = Math.round(
-                Math.abs((anom.value - anom.expected) / (anom.expected || 1)) *
-                  100
-              );
+              const prefix = describePeriod(anom.label, interval ?? null);
+              const pct = anomalyChangePct(anom);
               const dir = anom.direction === "drop" ? "below" : "above";
 
               return (

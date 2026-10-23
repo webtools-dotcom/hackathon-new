@@ -1,3 +1,4 @@
+/** PII masking. Runs in the browser before anything is sent to the server. */
 import type { DatasetProfile, Row } from "./schemas";
 
 export const MASK = {

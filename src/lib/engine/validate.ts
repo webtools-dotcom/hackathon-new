@@ -1,3 +1,4 @@
+/** Semantic plan validation against the real dataset profile. Model output is untrusted input. */
 import type { DatasetProfile, Plan, PlanIssue } from "./schemas";
 import { parseDate, parseNumber } from "./profile";
 

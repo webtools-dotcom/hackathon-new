@@ -1,3 +1,4 @@
+/** HTTP helpers for route handlers: body size cap, JSON parsing, client IP and generic errors. */
 export const MAX_BODY_BYTES = 32_768;
 
 export type ApiErrorCode =

@@ -1,3 +1,4 @@
+/** Column profiler: infers each column's kind (number, date, category, text, pii) from raw CSV strings. */
 import type {
   ColumnProfile,
   DatasetProfile,

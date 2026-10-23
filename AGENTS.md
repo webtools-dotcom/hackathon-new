@@ -12,7 +12,8 @@ Operational notes for AI coding and review agents. Project overview, architectur
 - `src/lib/sample-data.ts`: built-in demo dataset (Indian restaurant sales). `src/lib/demo-results.ts`: cached demo plan/narration.
 - `src/lib/server/`: server-only. `gemini.ts` (client, retry/backoff), `rate-limit.ts`, `cache.ts`, `prompts.ts`.
 - `src/app/api/plan/route.ts`, `src/app/api/narrate/route.ts`: the only code that calls Gemini.
-- `src/components/analyst/`: app UI. `src/components/ui/` is shadcn/ui output, do not hand-edit.
+- `src/lib/insights.ts`: pure helpers that turn results into headlines and period labels.
+- `src/components/analyst/`: app UI (`analyst-app.tsx` orchestrates; `hero.tsx`, `error-state.tsx`, charts, trace, drawer are leaf components). `src/components/ui/` is shadcn/ui output, do not hand-edit.
 - `scripts/bench.ts`: measures payload sizes and engine timings for the README.
 
 ## Rules

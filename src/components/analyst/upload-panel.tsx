@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SAMPLE_CSV, SAMPLE_FILE_NAME } from "@/lib/sample-data";
 
-interface UploadPanelProps {
+export interface UploadPanelProps {
   onRun: (input: {
     csvText: string;
     fileName: string;

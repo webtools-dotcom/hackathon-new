@@ -1,3 +1,4 @@
+/** Small TTL cache for model responses, keyed by a SHA-256 of the request shape. */
 import { createHash } from "node:crypto";
 
 export function cacheKey(parts: unknown): string {

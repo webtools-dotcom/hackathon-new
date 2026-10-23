@@ -1,3 +1,4 @@
+/** Evidence check: keeps only model actions whose cited numbers match the computed results. */
 import type { Action, StepResult } from "./schemas";
 
 export function verifyActions(

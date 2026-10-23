@@ -1,3 +1,4 @@
+/** Robust anomaly detection (median and MAD z-score) over trend series. */
 import type { Anomaly, ResultRow } from "./schemas";
 
 function computeMedian(arr: number[]): number {

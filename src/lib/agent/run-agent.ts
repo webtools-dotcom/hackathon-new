@@ -1,3 +1,4 @@
+/** Client-side agent loop: parse, profile, mask, plan, execute, verify, re-plan once, narrate. */
 import Papa from "papaparse";
 import type {
   Row,

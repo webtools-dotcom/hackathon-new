@@ -1,3 +1,4 @@
+/** Zod schemas and types shared by the browser engine, the API routes and the model contract. */
 import { z } from "zod";
 
 export type Row = Record<string, string>; // papaparse output with header: true, all values strings

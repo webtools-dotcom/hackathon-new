@@ -1,3 +1,4 @@
+/** System instructions and prompt builders. User data is always framed as data, never instructions. */
 import type { PlanIssue } from "@/lib/engine/schemas";
 import type { PlanRequest, NarrateRequest } from "./contracts";
 

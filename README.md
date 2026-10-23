@@ -9,7 +9,7 @@
 [**Live demo**](https://hackathon-new-sooty.vercel.app) · one click on *Try sample data*, no sign-up
 
 [![CI](https://github.com/webtools-dotcom/hackathon-new/actions/workflows/ci.yml/badge.svg)](https://github.com/webtools-dotcom/hackathon-new/actions/workflows/ci.yml)
-![Tests](https://img.shields.io/badge/tests-65%20passing-1f7a5c)
+![Tests](https://img.shields.io/badge/tests-73%20passing-1f7a5c)
 ![Gemini](https://img.shields.io/badge/Google-Gemini%20API-1f7a5c)
 ![License](https://img.shields.io/badge/license-MIT-1f7a5c)
 
@@ -79,7 +79,7 @@ Measured on the live deployment with the built-in sample dataset (333 orders, 11
 | End-to-end time | **5.0 s** (planning 2.8 s, actions 2.2 s; all in-browser steps together under 10 ms) | In-app metrics panel, live run |
 | Tokens per analysis | 1,897 in / 860 out | Gemini `usageMetadata`, live run |
 | Repeat analysis of the same schema | Served from cache, no model call | [`cache.ts`](src/lib/server/cache.ts) |
-| Tests | **65 passing** across 18 files | `npm test` |
+| Tests | **73 passing** across 19 files | `npm test` |
 
 ## How this maps to the evaluation criteria
 
@@ -88,8 +88,8 @@ Measured on the live deployment with the built-in sample dataset (333 orders, 11
 | **Problem alignment** | A real owner's question ("why did August dip?") answered with charts, an anomaly callout and three actions in about 5 seconds | Live demo, *Try sample data* |
 | **Security** | Server-only API key; strict Zod on every request and every model output; allow-listed operations only; PII masked before any network call; 32 KB body cap; 20 req/min per IP; CSP and security headers; generic error codes | [`SECURITY.md`](SECURITY.md), `npm test` |
 | **Efficiency** | Profiles and aggregates instead of rows (13% of bytes); response cache keyed by schema and question; one re-plan maximum; Flash-Lite model | [`bench/results.json`](bench/results.json) |
-| **Testing** | 65 Vitest tests: profiler, masking, engine, anomaly detector, evidence check, rate limit, cache, routes with Gemini mocked, the full agent loop, security headers; plus an opt-in live Gemini test and a benchmark | `npm test`, `npm run test:live`, `npm run bench` |
-| **Accessibility** | Labelled inputs; keyboard-operable upload, drawer and tabs; focus returns after the dialog closes; visible focus rings; status shown by icon and text, never colour alone; screen-reader tables behind every chart; `aria-live` progress; reduced-motion support; light and dark themes; works at 375 px | [`src/components/analyst/`](src/components/analyst) |
+| **Testing** | 73 Vitest tests: profiler, masking, engine, anomaly detector, evidence check, rate limit, cache, routes with Gemini mocked, the full agent loop, headline selection, security headers; plus an opt-in live Gemini test and a benchmark | `npm test`, `npm run test:live`, `npm run bench` |
+| **Accessibility** | Skip link and landmarks; labelled inputs; keyboard-operable upload, drawer and tabs; focus returns after the dialog closes; visible focus rings; status shown by icon and text, never colour alone; every chart backed by a screen-reader data table (the SVG itself is hidden from assistive tech); `aria-live` progress; reduced-motion support; light and dark themes; works at 375 px | [`src/components/analyst/`](src/components/analyst) |
 | **Code quality** | TypeScript strict with no `any`; pure, unit-tested engine separated from UI and server; typed contracts shared end to end; CI runs lint, types, tests, build and audit on every push | [`.github/workflows/ci.yml`](.github/workflows/ci.yml) |
 | **Google technology** | Gemini API through the official `@google/genai` SDK, used twice per analysis with schema-constrained JSON output | [`gemini.ts`](src/lib/server/gemini.ts) |
 
@@ -131,7 +131,7 @@ npm run dev
 
 | Command | What it checks |
 |---|---|
-| `npm test` | 65 unit and integration tests, Gemini mocked |
+| `npm test` | 73 unit and integration tests, Gemini mocked |
 | `npm run test:live` | One real Gemini call with your key |
 | `npm run bench` | Engine speed on 333 and 20,000 rows |
 | `npm run lint` · `npx tsc --noEmit` · `npm run build` | Lint, types, production build |

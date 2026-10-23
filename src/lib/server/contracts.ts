@@ -1,3 +1,4 @@
+/** Strict request and response contracts for /api/plan and /api/narrate. */
 import { z } from "zod";
 import {
   DatasetProfileSchema,

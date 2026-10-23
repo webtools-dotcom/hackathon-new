@@ -1,3 +1,4 @@
+/** Deterministic plan executor. Only allow-listed operations; no eval or generated code. */
 import type {
   Anomaly,
   DatasetProfile,
