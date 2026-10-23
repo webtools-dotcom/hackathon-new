@@ -27,4 +27,9 @@ describe("security headers", () => {
     );
     expect(headerMap.get("Content-Security-Policy")).toBeTruthy();
   });
+
+  it("enforces HTTPS with a two-year HSTS policy", () => {
+    const hsts = securityHeaders(false).find((h) => h.key === "Strict-Transport-Security");
+    expect(hsts?.value).toBe("max-age=63072000; includeSubDomains; preload");
+  });
 });

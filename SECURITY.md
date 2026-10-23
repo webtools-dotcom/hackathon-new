@@ -13,7 +13,7 @@ Open a private security advisory on this repository (Security tab, "Report a vul
 | Personal data sent to a third party | Personal columns detected and masked in the browser; raw rows never leave the browser | `src/lib/engine/mask.ts`, `src/lib/agent/run-agent.ts` |
 | Oversized or malformed requests | Request size caps and Zod validation on every route | `src/lib/server/http.ts`, `src/lib/server/contracts.ts` |
 | Abuse / cost exhaustion | Per-IP rate limiting on API routes (in-memory; see limitations) | `src/lib/server/rate-limit.ts` |
-| Browser-side attacks (XSS, clickjacking, sniffing) | Security headers set in `next.config` (CSP, X-Content-Type-Options, X-Frame-Options, Referrer-Policy); no `dangerouslySetInnerHTML` | `next.config.ts` |
+| Browser-side attacks (XSS, clickjacking, sniffing) | Security headers set in `next.config` (CSP, HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy); no `dangerouslySetInnerHTML` | `next.config.ts` |
 | Information leaks through errors | Generic error messages to clients; details only in server logs | `src/lib/server/http.ts`, `src/app/api/*/route.ts` |
 
 ## Dependencies
