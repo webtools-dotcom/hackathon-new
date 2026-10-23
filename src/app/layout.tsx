@@ -6,8 +6,9 @@ import { ThemeProvider } from "@/components/theme-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Project Name",
-  description: "Built for Prompt War 2026",
+  title: "Tijori: AI sales analyst for small businesses",
+  description:
+    "Upload a sales CSV. Gemini plans the analysis, your browser does the maths, and you get three actions backed by real numbers. Personal data never leaves the page.",
 };
 
 export default function RootLayout({
